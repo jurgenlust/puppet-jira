@@ -1,0 +1,20 @@
+{
+  "name": "jlust-jira",
+  "author": "jlust",
+  "description": "",
+  "license": "",
+  "project_page": "",
+  "source": "",
+  "summary": "",
+  "version": "",
+  "checksums": {
+    "Modulefile": "548f420ac2fbc2e52ec0197ca7e29dd0",
+    "README": "bb96a9cad660570fc2e0c88ac0cd73aa",
+    "README.md": "3df60b0f9383daac40d7fec3b71c9ae2",
+    "manifests/init.pp": "b9919004ff327f27e713c272296c6599",
+    "spec/spec.opts": "a600ded995d948e393fbe2320ba8e51c",
+    "spec/spec_helper.rb": "ca19ec4f451ebc7fdb035b52eae6e909",
+    "tests/init.pp": "96e22ea39cb0b1f44e14b5dda9fd14f3"
+  },
+  "dependencies": []
+}
