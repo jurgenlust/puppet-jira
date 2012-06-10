@@ -1,0 +1,11 @@
+<Context path="<%= webapp_context -%>" docBase="<%= webapp_war -%>" reloadable="false">
+          <Resource name="jdbc/JiraDS" auth="Container" type="javax.sql.DataSource"
+            username="<%= database_user -%>"
+            password="<%= database_pass -%>"
+            driverClassName="<%= database_driver -%>"
+            url="<%= database_url -%>"
+           />
+  <Resource name="UserTransaction" auth="Container" type="javax.transaction.UserTransaction"
+    factory="org.objectweb.jotm.UserTransactionFactory" jotm.timeout="60"/>
+  <Manager pathname=""/>
+</Context>

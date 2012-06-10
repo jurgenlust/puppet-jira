@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  
+<jira-database-config>
+  <name>defaultDS</name>
+  <delegator-name>default</delegator-name>
+  <database-type><%= database_type -%></database-type>
+  <schema-name>public</schema-name>
+  <jdbc-datasource>
+    <url><%= database_url -%></url>
+    <driver-class><%= database_driver -%></driver-class>
+    <username><%= database_user -%></username>
+    <password><%= database_pass -%></password>
+    <pool-size>15</pool-size>
+  </jdbc-datasource>
+</jira-database-config>
