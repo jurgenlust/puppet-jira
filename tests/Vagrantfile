@@ -1,0 +1,13 @@
+Vagrant::Config.run do |config|
+  config.vm.box = "squeeze64"
+  config.vm.box_url = "https://github.com/downloads/jurgenlust/vagrant-base-boxes/squeeze64.box"
+
+  config.vm.forward_port 8280, 8280
+  
+  config.vm.customize ["modifyvm", :id, "--memory", 1024]  
+  
+  config.vm.provision :puppet, :module_path => "../../" do |puppet|
+     puppet.manifests_path = "."
+     puppet.manifest_file  = "init.pp"
+  end
+end
