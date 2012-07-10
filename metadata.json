@@ -12,7 +12,7 @@
     "README": "bb96a9cad660570fc2e0c88ac0cd73aa",
     "README.md": "728f97cd10a98747efa8845a93e43996",
     "files/db/postgresql-9.1-902.jdbc4.jar": "42b118950c660485a77dc7e79a8e06b1",
-    "manifests/init.pp": "6e2c77132916fca53d77e82c562606d3",
+    "manifests/init.pp": "37744dcacb0ceb131dfd628ba304d27f",
     "spec/spec.opts": "a600ded995d948e393fbe2320ba8e51c",
     "spec/spec_helper.rb": "ca19ec4f451ebc7fdb035b52eae6e909",
     "templates/context.erb": "158aeef31e18679865d2ffbbd82a7c82",

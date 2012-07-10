@@ -84,7 +84,8 @@ class jira (
 		user => $user,
 		creates => "${build_dir}/build.sh",
 		timeout => 1200,
-		require => [File[$downloaded_tarball],File[$build_parent_dir]],	
+		require => [File[$downloaded_tarball],File[$build_parent_dir]],
+		notify => Exec['clean-jira'],	
 	}
 
 	file { $build_dir:
@@ -115,6 +116,17 @@ class jira (
 		require => Exec["extract-jira"],
 	}
 	
+# clean the previous JIRA war-file	
+	exec { "clean-jira":
+		command => "/bin/rm -rf ${webapp_base}/${user}/tomcat/webapps/*",
+		user => $user,
+		refreshonly => true,
+		notify => Exec["build-jira"],
+		require => [
+			Tomcat::Webapp::Tomcat[$user]
+		],
+	}
+
 	
 # build the JIRA war-file	
 	exec { "build-jira":
@@ -122,11 +134,13 @@ class jira (
 		user => $user,
 		creates => "${webapp_base}/${user}/tomcat/webapps/${webapp_war}",
 		cwd => $build_dir,
+		refreshonly => true,
 		require => [
 			File["jira.properties"],
 			File["dbconfig.xml"],
 			Tomcat::Webapp::Tomcat[$user]
 		],
+		notify => Tomcat::Webapp::Service[$user]
 	}
 	
 	file { "jira-war" :
