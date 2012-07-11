@@ -1,6 +1,6 @@
 Vagrant::Config.run do |config|
-  config.vm.box = "squeeze64"
-  config.vm.box_url = "https://github.com/downloads/jurgenlust/vagrant-base-boxes/squeeze64.box"
+  config.vm.box = "precise64"
+  config.vm.box_url = "http://files.vagrantup.com/precise64.box"
 
   config.vm.forward_port 8280, 8280
   
