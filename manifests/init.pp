@@ -155,6 +155,7 @@ class jira (
 			File["dbconfig.xml"],
 			Tomcat::Webapp::Tomcat[$user]
 		],
+		notify => Tomcat::Webapp::Service[$user]
 	}
 	
 # download extra libraries needed by JIRA
