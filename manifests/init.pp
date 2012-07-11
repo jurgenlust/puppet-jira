@@ -21,7 +21,8 @@ class jira (
 	$database_user = "jira",
 	$database_pass = "jira",
 	$number = 2,
-	$version = "5.0.6",
+	$version = "5.1",
+	$jira_jars_version = "5.1",
 	$contextroot = "jira",
 	$webapp_base = "/srv"
 ){
@@ -32,7 +33,7 @@ class jira (
 	$download_dir = "/tmp"
 	$downloaded_tarball = "${download_dir}/${tarball}"
 	$download_url = "http://www.atlassian.com/software/jira/downloads/binary/${tarball}"
-	$library_download_url = "http://www.atlassian.com/software/jira/downloads/binary/jira-jars-tomcat-distribution-5.0-rc2-tomcat-6x.zip"
+	$library_download_url = "http://www.atlassian.com/software/jira/downloads/binary/jira-jars-tomcat-distribution-${jira_jars_version}-tomcat-6x.zip"
 	$build_parent_dir = "${webapp_base}/${user}/build"
 	$build_dir = "${build_parent_dir}/${version}"
 	$jira_dir = "${webapp_base}/${user}"
@@ -84,7 +85,11 @@ class jira (
 		user => $user,
 		creates => "${build_dir}/build.sh",
 		timeout => 1200,
-		require => [File[$downloaded_tarball],File[$build_parent_dir]],	
+		require => [File[$downloaded_tarball],File[$build_parent_dir]],
+		notify => [
+			Exec['clean-jira'],
+			Exec['clean-jira-libs'],	
+		]	
 	}
 
 	file { $build_dir:
@@ -115,13 +120,36 @@ class jira (
 		require => Exec["extract-jira"],
 	}
 	
+# clean the previous JIRA libraries
+	exec { "clean-jira-libs":
+		command => "/bin/rm -rf ${webapp_base}/${user}/tomcat/lib/*",
+		user => $user,
+		refreshonly => true,
+		notify => Exec["download-extra-jira-libs"],
+		require => [
+			Tomcat::Webapp::Tomcat[$user]
+		],
+	}
+
+	
+# clean the previous JIRA war-file	
+	exec { "clean-jira":
+		command => "/bin/rm -rf ${webapp_base}/${user}/tomcat/webapps/*",
+		user => $user,
+		refreshonly => true,
+		notify => Exec["build-jira"],
+		require => [
+			Tomcat::Webapp::Tomcat[$user]
+		],
+	}
+
 	
 # build the JIRA war-file	
 	exec { "build-jira":
-		command => "/bin/sh build.sh && mv ${build_dir}/dist-tomcat/tomcat-6/${jira_build}.war ${webapp_base}/${user}/tomcat/webapps/${webapp_war}",
+		command => "/bin/sh build.sh && /bin/cp ${build_dir}/dist-tomcat/tomcat-6/${jira_build}.war ${webapp_base}/${user}/tomcat/webapps/${webapp_war}",
 		user => $user,
-		creates => "${webapp_base}/${user}/tomcat/webapps/${webapp_war}",
 		cwd => $build_dir,
+		refreshonly => true,
 		require => [
 			File["jira.properties"],
 			File["dbconfig.xml"],
@@ -129,34 +157,22 @@ class jira (
 		],
 	}
 	
-	file { "jira-war" :
-		path => "${webapp_base}/${user}/tomcat/webapps/${webapp_war}",
-		ensure => file,
-		owner => $user,
-		group => $user,
-		require => Exec["build-jira"],
-	}
-	
 # download extra libraries needed by JIRA
 	exec { "download-extra-jira-libs":
-		command => "/usr/bin/wget -O /tmp/jira-jars.zip ${library_download_url}",
-		creates => "/tmp/jira-jars.zip",
+		command => "/usr/bin/wget -O /tmp/jira-jars-${jira_jars_version}.zip ${library_download_url}",
+		creates => "/tmp/jira-jars-${jira_jars_version}.zip",
+		refreshonly => true,
 		timeout => 1200,	
+		notify => Exec["extract-extra-jira-libs"],
 		require => Tomcat::Webapp::User[$user],
 	}
 	
-	file { "/tmp/jira-jars.zip" :
-		require => Exec["download-extra-jira-libs"],
-		ensure => file,
-	}
-	
 	exec { "extract-extra-jira-libs":
-		command => "/usr/bin/unzip -d ${jira_dir}/tomcat/lib /tmp/jira-jars.zip",
-		creates => "${jira_dir}/tomcat/lib/log4j-1.2.16.jar",
+		command => "/usr/bin/unzip -d ${jira_dir}/tomcat/lib /tmp/jira-jars-${jira_jars_version}.zip",
 		user => $user,
+		refreshonly => true,
 		require => [
 			Tomcat::Webapp::Tomcat[$user],
-			File["/tmp/jira-jars.zip"],
 			Package["unzip"]
 		]
 	}
@@ -168,7 +184,10 @@ class jira (
 		ensure => file,
 		owner => $user,
 		group => $user,
-		require => Tomcat::Webapp::Tomcat[$user],
+		require => [
+			Tomcat::Webapp::Tomcat[$user],
+			Exec["extract-extra-jira-libs"]
+		]
 	}    
 	
 # manage the Tomcat instance
@@ -179,7 +198,7 @@ class jira (
 		java_opts => "-server -Dorg.apache.jasper.runtime.BodyContentImpl.LIMIT_BUFFER=true -Dmail.mime.decodeparameters=true -Xms128m -Xmx512m -XX:MaxPermSize=256m -Djava.awt.headless=true",
 		server_host_config => template("jira/context.erb"),
 		service_require => [
-			File['jira-war'],
+			Exec['build-jira'],
 			File['jira-db-driver'],
 			File[$jira_home],
 			Exec['extract-extra-jira-libs']

@@ -1,6 +1,9 @@
 include tomcat
 include postgres
 
+package { 'openjdk-6-jdk':
+	ensure => present,
+}
 postgres::user { 'jirauser': 
 	username => 'jirauser',
 	password => 'jira_secret_password',
@@ -21,8 +24,12 @@ class { "jira":
 	database_user => "jirauser",
 	database_pass => "jira_secret_password",
 	number => 2, # the Tomcat http port will be 8280
-	version => "5.0.6", # the JIRA version
+	version => "5.1", # the JIRA version
+	jira_jars_version => "5.1",
 	contextroot => "/",
 	webapp_base => "/opt", # JIRA will be installed in /opt/jira
-	require => [Postgres::Db['jiradb'],Class["tomcat"]],
+	require => [
+		Postgres::Db['jiradb'],
+		Class["tomcat"]
+	],
 }
