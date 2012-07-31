@@ -22,7 +22,7 @@ class jira (
 	$database_user = "jira",
 	$database_pass = "jira",
 	$number = 2,
-	$version = "5.1",
+	$version = "5.1.1",
 	$jira_jars_version = "5.1",
 	$contextroot = "jira",
 	$webapp_base = "/srv"
