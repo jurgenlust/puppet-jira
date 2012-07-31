@@ -4,7 +4,7 @@
   <name>defaultDS</name>
   <delegator-name>default</delegator-name>
   <database-type><%= database_type -%></database-type>
-  <schema-name>public</schema-name>
+  <schema-name><%= database_schema -%></schema-name>
   <jdbc-datasource>
     <url><%= database_url -%></url>
     <driver-class><%= database_driver -%></driver-class>

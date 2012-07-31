@@ -14,6 +14,7 @@ class jira (
 	$user = "jira",	
 	$database_name = "jira",
 	$database_type = "postgres72",
+	$database_schema = "public",
 	$database_driver = "org.postgresql.Driver",
 	$database_driver_jar = "postgresql-9.1-902.jdbc4.jar",
 	$database_driver_source = "puppet:///modules/jira/db/postgresql-9.1-902.jdbc4.jar",
@@ -21,7 +22,7 @@ class jira (
 	$database_user = "jira",
 	$database_pass = "jira",
 	$number = 2,
-	$version = "5.1",
+	$version = "5.1.1",
 	$jira_jars_version = "5.1",
 	$contextroot = "jira",
 	$webapp_base = "/srv"
@@ -149,6 +150,7 @@ class jira (
 		command => "/bin/sh build.sh && /bin/cp ${build_dir}/dist-tomcat/tomcat-6/${jira_build}.war ${webapp_base}/${user}/tomcat/webapps/${webapp_war}",
 		user => $user,
 		cwd => $build_dir,
+		timeout => 0,
 		refreshonly => true,
 		require => [
 			File["jira.properties"],
