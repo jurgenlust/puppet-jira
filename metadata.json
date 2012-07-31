@@ -12,11 +12,11 @@
     "README": "bb96a9cad660570fc2e0c88ac0cd73aa",
     "README.md": "728f97cd10a98747efa8845a93e43996",
     "files/db/postgresql-9.1-902.jdbc4.jar": "42b118950c660485a77dc7e79a8e06b1",
-    "manifests/init.pp": "8ca8f3d2f23d203b68687493d5d0f623",
+    "manifests/init.pp": "23a1a1ad9274c8da71dbcd00d6f71ac2",
     "spec/spec.opts": "a600ded995d948e393fbe2320ba8e51c",
     "spec/spec_helper.rb": "ca19ec4f451ebc7fdb035b52eae6e909",
     "templates/context.erb": "158aeef31e18679865d2ffbbd82a7c82",
-    "templates/dbconfig.xml.erb": "1329066e36f5659d7904933e5c041377",
+    "templates/dbconfig.xml.erb": "4d73fe7e826ab65031ca0147233f376a",
     "templates/jira-application.properties.erb": "7c7194557c1a4628647a18e69887c323",
     "tests/Vagrantfile": "c3f0b951718067909541fdecc5b3bd63",
     "tests/init.pp": "c5832af000b1f5e308d1c1b822032a5e"
