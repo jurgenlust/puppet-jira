@@ -4,12 +4,18 @@
   <name>defaultDS</name>
   <delegator-name>default</delegator-name>
   <database-type><%= database_type -%></database-type>
+<% if @database_schema %>  
   <schema-name><%= database_schema -%></schema-name>
+<% end %>
   <jdbc-datasource>
     <url><%= database_url -%></url>
     <driver-class><%= database_driver -%></driver-class>
     <username><%= database_user -%></username>
     <password><%= database_pass -%></password>
-    <pool-size>15</pool-size>
-  </jdbc-datasource>
+	<pool-min-size>20</pool-min-size>
+    <pool-max-size>20</pool-max-size>
+    <pool-max-wait>30000</pool-max-wait>
+    <pool-max-idle>20</pool-max-idle>
+    <pool-remove-abandoned>true</pool-remove-abandoned>
+    <pool-remove-abandoned-timeout>300</pool-remove-abandoned-timeout>  </jdbc-datasource>
 </jira-database-config>
