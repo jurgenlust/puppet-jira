@@ -19,7 +19,7 @@ class { "jira":
 	database_name => "jiradb",
 	database_driver => "org.postgresql.Driver",
 	database_driver_jar => "postgresql-9.1-902.jdbc4.jar",
-	database_driver_source => "puppet:///modules/confluence/db/postgresql-9.1-902.jdbc4.jar",
+	database_driver_source => "puppet:///modules/jira/db/postgresql-9.1-902.jdbc4.jar",
 	database_url => "jdbc:postgresql://localhost/jiradb",
 	database_user => "jirauser",
 	database_pass => "jira_secret_password",
