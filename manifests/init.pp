@@ -21,6 +21,7 @@ class jira (
 	$database_url = "jdbc:postgresql://localhost/jira",
 	$database_user = "jira",
 	$database_pass = "jira",
+	$dbconfig_template = undef,
 	$number = 2,
 	$version = "5.1.1",
 	$jira_jars_version = "5.1",
@@ -51,6 +52,13 @@ class jira (
     	'/' => "ROOT.war",
     	default => "${contextroot}.war"	
     }
+    
+# check if a custom dbconfig.xml template is specified, otherwise use the default
+	if ($dbconfig_template) {
+		$dbconfig_xml_template = template('$dbconfig_template')
+	} else {
+		$dbconfig_xml_template = template('jira/dbconfig.xml.erb')
+	}   
 	
 # we need the unzip package
 	if (!defined(Package["unzip"])) {
@@ -117,7 +125,7 @@ class jira (
 	
 	file { "dbconfig.xml" :
 		path => "${jira_home}/dbconfig.xml",
-		content => template("jira/dbconfig.xml.erb"),
+		content => $dbconfig_xml_template,
 		require => Exec["extract-jira"],
 	}
 	

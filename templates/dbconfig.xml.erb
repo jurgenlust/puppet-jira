@@ -4,7 +4,7 @@
   <name>defaultDS</name>
   <delegator-name>default</delegator-name>
   <database-type><%= database_type -%></database-type>
-<% if @database_schema %>  
+<% if database_schema != 'none' %>  
   <schema-name><%= database_schema -%></schema-name>
 <% end %>
   <jdbc-datasource>
