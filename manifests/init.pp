@@ -23,7 +23,8 @@ class jira (
 	$database_pass = "jira",
 	$dbconfig_template = undef,
 	$number = 2,
-	$version = "5.1.1",
+	$memory = "512m",
+	$version = "5.1.2",
 	$jira_jars_version = "5.1",
 	$contextroot = "jira",
 	$webapp_base = "/srv"
@@ -206,7 +207,7 @@ class jira (
 		username => $user, 
 		number => $number,
 		webapp_base => $webapp_base,
-		java_opts => "-server -Dorg.apache.jasper.runtime.BodyContentImpl.LIMIT_BUFFER=true -Dmail.mime.decodeparameters=true -Xms128m -Xmx512m -XX:MaxPermSize=256m -Djava.awt.headless=true",
+		java_opts => "-server -Dorg.apache.jasper.runtime.BodyContentImpl.LIMIT_BUFFER=true -Dmail.mime.decodeparameters=true -Xms${memory} -Xmx${memory} -XX:MaxPermSize=256m -Djava.awt.headless=true",
 		server_host_config => template("jira/context.erb"),
 		service_require => [
 			Exec['build-jira'],

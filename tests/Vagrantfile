@@ -4,7 +4,7 @@ Vagrant::Config.run do |config|
 
   config.vm.forward_port 8280, 8280
   
-  config.vm.customize ["modifyvm", :id, "--memory", 1024]  
+  config.vm.customize ["modifyvm", :id, "--memory", 2048]  
   
   config.vm.provision :puppet, :module_path => "../../" do |puppet|
      puppet.manifests_path = "."
